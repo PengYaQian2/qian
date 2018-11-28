@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.Tb_empMapper">
+  <resultMap id="list" type="Tb_emp">
+    <result property="dname" column="dname"></result>
+  </resultMap>
+
+    <select id="query" resultMap="list">
+       select * from Tb_emp e inner join Tb_dept d on d.dids = e.dept_id
+       limit #{currNo},#{currSize}
+    </select>
+    
+    <select id="count" resultType="_int">
+       select count(1) from Tb_emp e inner join Tb_dept d on d.dids = e.dept_id
+    </select>
+    
+    <insert id="add" parameterType="Tb_emp">
+      insert Tb_emp 
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+          NULL,
+          <if test="ename!=null and ename!=''">#{ename}</if>
+          <if test="dept_id!=null and dept_id!=0">#{dept_id}</if>
+          <if test="age!=null and age!=0 ">#{age}</if>
+          <if test="gender!=null and gender!=''">#{gender}</if>
+          NOW(),
+          <if test="path!=null and path!=''">#{path}</if>
+        </trim>
+    </insert>
+    
+    <select id="selectId" resultType="Tb_emp">
+         select * from Tb_emp e inner join Tb_dept d on d.dids = e.dept_id
+         where eid=#{eid}
+    </select>
+    
+    
+    <update id="modify" parameterType="Tb_emp">
+        update Tb_emp 
+        <set>
+         <if test="ename!=null and ename!=''">ename=#{ename}</if>
+          <if test="dept_id!=null and dept_id!=0">dept_id=#{dept_id}</if>
+          <if test="age!=null and age!=0 ">age=#{age}</if>
+          <if test="gender!=null and gender!=''">gender=#{gender}</if>
+          <if test="workDate!=null and workDate!=''">workDate=#{workDate}</if>
+          <if test="path!=null and path!=''">path=#{path}</if>
+        </set> 
+          where eid=#{eid}
+    </update>
+    
+    <delete id="delete" parameterType="_int">
+       delete from Tb_emp where eid=#{eid}
+    </delete>
+    
+</mapper>
+
